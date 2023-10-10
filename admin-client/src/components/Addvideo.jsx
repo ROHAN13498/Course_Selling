@@ -8,7 +8,7 @@ import { uploadFile } from 'react-s3';
 import { Buffer } from "buffer/";
 window.Buffer = Buffer;
 
-function AddCourse() {
+function Addvideo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -61,50 +61,16 @@ function AddCourse() {
           label="Description"
           variant="outlined"
         />
-
-        <TextField
-          style={{ marginBottom: 10 }}
-          onChange={(e) => setImage(e.target.value)}
-          fullWidth={true}
-          label="Image link"
-          variant="outlined"
-        />
-
-        <TextField
-          style={{ marginBottom: 10 }}
-          onChange={(e) => setPrice(e.target.value)}
-          fullWidth={true}
-          label="Price"
-          variant="outlined"
-        />
-
         <input type="file" onChange={handleFileInput} />
         <Button
           size={"large"}
           variant="contained"
           onClick={handleUpload} // Call the handleUpload function
         >Upload to S3</Button>
-        <Button
-          size={"large"}
-          variant="contained"
-          onClick={async () => {
-            await axios.post(`${BASE_URL}/admin/courses`, {
-              title: title,
-              description: description,
-              imageLink: image,
-              published: true,
-              price,
-            }, {
-              headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-              }
-            });
-            alert("Added course!");
-          }}
-        >Add course</Button>
+      
       </div>
     </div>
   );
 }
 
-export default AddCourse;
+export default Addvideo;
