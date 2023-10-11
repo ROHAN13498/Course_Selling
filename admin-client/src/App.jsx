@@ -6,11 +6,12 @@ import AddCourse from "./components/AddCourse.jsx";
 import Courses from "./components/Courses";
 import Course from "./components/Course";
 import {Landing} from "./components/Landing.jsx";
-import { Addvideo } from './components/Addvideo.jsx';
+import { Addcv } from './components/Addcv.jsx';
 
 import {useState, useEffect} from "react";
 import axios from "axios";
 import {BASE_URL} from "./config.js";
+
 
 function App() {
     const [userEmail, setUserEmail] = useState(null)
@@ -44,7 +45,7 @@ function App() {
                         <Route path={"/signin"} element={<Signin setUserEmail={setUserEmail} />} />
                         <Route path={"/signup"} element={<Signup setUserEmail={setUserEmail} />} />
                         <Route path={"/"} element={<Landing userEmail={userEmail} />} />
-                        <Route path={"/addvideo"} element={<Addvideo />} />
+                        <Route path={"/addvideo/:courseId"} element={<Addcv/>} />
                     </Routes>
                 </Router>
 

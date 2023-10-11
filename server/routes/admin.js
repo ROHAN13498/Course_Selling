@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const express = require('express');
-const { User, Course, Admin } = require("../db");
+const { User, Course, Admin,Video } = require("../db");
 const jwt = require('jsonwebtoken');
 const { SECRET } = require("../middleware/auth")
 const { authenticateJwt } = require("../middleware/auth");
@@ -67,6 +67,7 @@ router.post('/signup', (req, res) => {
   });
   
   router.get('/courses', authenticateJwt, async (req, res) => {
+    
     const username = req.user.username;
     const admin = await Admin.findOne({ username });
     
@@ -79,7 +80,24 @@ router.post('/signup', (req, res) => {
     res.json({ courses: admin.adminCourses });
   });
   
-  
+  router.get('/url/:courseId', authenticateJwt, async (req, res) => {
+    const course = await Course.findById(req.params.courseId);
+    await course.populate('urls');
+    console.log (course);
+    res.json({ urls: course.urls});
+  });
+
+  router.post('/url/:courseId',authenticateJwt,async(req,res)=>{
+    console.log("inside route");
+    console.log(req.body);
+    const V=new Video(req.body);
+    const course = await Course.findById(req.params.courseId);
+    course.urls.push(V);
+    const username = req.user.username;
+    await V.save();
+    await course.save();
+    res.json({ message: 'Video added succesfully' });
+  })
   router.get('/course/:courseId', authenticateJwt, async (req, res) => {
     const courseId = req.params.courseId;
     const course = await Course.findById(courseId);
