@@ -57,7 +57,7 @@ export function Videocard({ course }) {
                     variant='contained'
                     size='large'
                     onClick={() => {
-                        navigate(`/addvideo/${course._id}`);
+                        navigate(`/video/${course._id}`);
                     }}
                 >
                     View content

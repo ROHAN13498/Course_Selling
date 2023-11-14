@@ -7,7 +7,7 @@ import Courses from "./components/Courses";
 import Course from "./components/Course";
 import {Landing} from "./components/Landing.jsx";
 import { Addcv } from './components/Addcv.jsx';
-
+import { Video } from './components/Video.jsx';
 import {useState, useEffect} from "react";
 import axios from "axios";
 import {BASE_URL} from "./config.js";
@@ -46,6 +46,7 @@ function App() {
                         <Route path={"/signup"} element={<Signup setUserEmail={setUserEmail} />} />
                         <Route path={"/"} element={<Landing userEmail={userEmail} />} />
                         <Route path={"/addvideo/:courseId"} element={<Addcv/>} />
+                        <Route path={"/video/:videoId"} element={<Video/>} />
                     </Routes>
                 </Router>
 

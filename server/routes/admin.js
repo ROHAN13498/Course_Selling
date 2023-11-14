@@ -83,17 +83,15 @@ router.post('/signup', (req, res) => {
   router.get('/url/:courseId', authenticateJwt, async (req, res) => {
     const course = await Course.findById(req.params.courseId);
     await course.populate('urls');
-    console.log (course);
     res.json({ urls: course.urls});
   });
 
   router.post('/url/:courseId',authenticateJwt,async(req,res)=>{
-    console.log("inside route");
-    console.log(req.body);
+    // console.log("inside route");
+    // console.log(req.body);
     const V=new Video(req.body);
     const course = await Course.findById(req.params.courseId);
     course.urls.push(V);
-    const username = req.user.username;
     await V.save();
     await course.save();
     res.json({ message: 'Video added succesfully' });
@@ -103,5 +101,11 @@ router.post('/signup', (req, res) => {
     const course = await Course.findById(courseId);
     res.json({ course });
   });
+  router.get('/getVideo/:videoId',async(req,res)=>{
+    const videoId=req.params.videoId;
+    const video=await Video.findById(videoId);
+    console.log(video);
+    res.json({video});
+  })
 
   module.exports = router

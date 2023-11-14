@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
+import { Button, Card, Typography } from '@mui/material';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { BASE_URL } from "../config.js";
@@ -31,7 +30,7 @@ export const Addcv = () => {
         init();
     }, []);
 
-    const S3_BUCKET = 'coursesellingvideo';
+    const S3_BUCKET = "coursesellingvideo"
     const REGION = 'ap-south-1';
     const ACCESS_KEY = 'AKIA5A4HQZ74XW23IIF3';
     const SECRET_ACCESS_KEY = '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';
@@ -43,38 +42,38 @@ export const Addcv = () => {
         secretAccessKey: SECRET_ACCESS_KEY,
     };
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (selectedImageFile && selectedVideoFile) {
-            // Uploading image
-            uploadFile(selectedImageFile, config)
-                .then(async (imageData) => {
-                    const imageUrl = imageData.location;
-                    setImage(imageUrl);
+            try {
+                const imageData = await uploadFile(selectedImageFile, config);
+                const imageUrl = imageData.location;
+                console.log(imageUrl);
+                setImage(imageUrl);
 
-                    // Uploading video
-                    uploadFile(selectedVideoFile, config)
-                        .then(async (videoData) => {
-                            const videoUrl = videoData.location;
-                            setVideo(videoUrl);
+                const videoData = await uploadFile(selectedVideoFile, config);
+                const videoUrl = videoData.location;
+                console.log(videoUrl);
+                setVideo(videoUrl);
 
-                            const response = await axios.post(`${BASE_URL}/admin/url/${courseId}`, {
-                                title: title,
-                                description: description,
-                                imageLink: image,
-                                url: video
-                            },
-                                {
-                                    headers: {
-                                        "Authorization": "Bearer " + localStorage.getItem("token")
-                                    }
-                                });
-                            alert(response.data.message);
-                        })
-                        .catch(videoErr => console.error(videoErr));
-                })
-                .catch(imageErr => console.error(imageErr));
+                const videoDataToSend = {
+                    title: title,
+                    description: description,
+                    imageLink: imageUrl,
+                    url: videoUrl,
+                };
+                console.log(videoDataToSend);
+
+                const response = await axios.post(`${BASE_URL}/admin/url/${courseId}`, videoDataToSend, {
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("token")
+                    }
+                });
+                alert(response.data.message);
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
         } else {
-            console.error("No files selected for upload.");
+            alert("No files selected for upload.");
         }
     };
 
@@ -88,35 +87,47 @@ export const Addcv = () => {
 
     return (
         <div>
-            {videos.length === 0 ? (
-                <div>
-                    <p>There are no courses</p>
-                    <TextField
-                        label="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <TextField
-                        label="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <input type="file" onChange={handleImageInput} />
-                    <input type="file" onChange={handleVideoInput} />
-                    <Button
-                        size={"large"}
-                        variant="contained"
-                        onClick={handleUpload}
-                    >
-                        Upload to S3
-                    </Button>
-                </div>
-            ) : (
+            { (
                 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
                     {videos.map(video => {
                         return <Videocard key={video._id} course={video} />
                     })}
+                    <Card style={{
+                        margin: 10,
+                        width: 300,
+                        minHeight: 200,
+                        padding: 20,
+                        border: '2px dashed #ccc',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center', 
+                        gap: 50, 
+                    }}>
+                        <TextField
+                            label="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            style={{ width: '100%' }}
+                        />
+                        <TextField
+                            label="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            style={{ width: '100%' }} 
+                        />
+                        <input type="file" onChange={handleImageInput} style={{ width: '100%' }} />
+                        <input type="file" onChange={handleVideoInput} style={{ width: '100%' }} /> 
+                        <Button
+                            size={"large"}
+                            variant="contained"
+                            onClick={handleUpload}
+                        >
+                            Upload content
+                        </Button>
+                    </Card>
+
                 </div>
+
             )}
         </div>
     );
