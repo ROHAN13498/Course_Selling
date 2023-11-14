@@ -30,10 +30,10 @@ export const Addcv = () => {
         init();
     }, []);
 
-    const S3_BUCKET = "coursesellingvideo"
-    const REGION = 'ap-south-1';
-    const ACCESS_KEY = 'AKIA5A4HQZ74XW23IIF3';
-    const SECRET_ACCESS_KEY = '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';
+    const S3_BUCKET = import.meta.env.VITE_BUCKET_NAME
+    const REGION =  import.meta.env.VITE_APP_REGION
+    const ACCESS_KEY =  import.meta.env.VITE_APP_ACCESS
+    const SECRET_ACCESS_KEY =  import.meta.env.VITE_APP_SECRET
 
     const config = {
         bucketName: S3_BUCKET,
@@ -41,6 +41,7 @@ export const Addcv = () => {
         accessKeyId: ACCESS_KEY,
         secretAccessKey: SECRET_ACCESS_KEY,
     };
+    console.log(config);
 
     const handleUpload = async () => {
         if (selectedImageFile && selectedVideoFile) {
