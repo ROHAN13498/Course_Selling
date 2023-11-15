@@ -41,7 +41,6 @@ export const Addcv = () => {
         accessKeyId: ACCESS_KEY,
         secretAccessKey: SECRET_ACCESS_KEY,
     };
-    console.log(config);
 
     const handleUpload = async () => {
         if (selectedImageFile && selectedVideoFile) {
