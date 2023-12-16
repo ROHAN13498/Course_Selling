@@ -60,7 +60,6 @@ function Signin({setUserEmail}) {
                         const data = res.data;
                         
                         localStorage.setItem("token", data.token);
-                        // window.location = "/"
                         setUserEmail(email)
                         navigate("/courses")
                     }}

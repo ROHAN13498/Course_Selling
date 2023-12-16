@@ -51,6 +51,8 @@ router.post('/signup', (req, res) => {
     const username=req.user.username;
     const  admin = await Admin.findOne({username});
     const course = new Course(req.body);
+    const courseid=course.id;
+    console.log(courseid);
     admin.adminCourses.push(course);
     await admin.save();
     await course.save();
@@ -87,14 +89,12 @@ router.post('/signup', (req, res) => {
   });
 
   router.post('/url/:courseId',authenticateJwt,async(req,res)=>{
-    // console.log("inside route");
-    // console.log(req.body);
     const V=new Video(req.body);
     const course = await Course.findById(req.params.courseId);
     course.urls.push(V);
     await V.save();
     await course.save();
-    res.json({ message: 'Video added succesfully' });
+    res.json({ message: 'Video added succesfully',id:V._id});
   })
   router.get('/course/:courseId', authenticateJwt, async (req, res) => {
     const courseId = req.params.courseId;
@@ -104,7 +104,6 @@ router.post('/signup', (req, res) => {
   router.get('/getVideo/:videoId',async(req,res)=>{
     const videoId=req.params.videoId;
     const video=await Video.findById(videoId);
-    console.log(video);
     res.json({video});
   })
 

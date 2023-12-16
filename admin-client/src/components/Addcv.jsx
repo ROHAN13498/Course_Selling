@@ -7,7 +7,11 @@ import { BASE_URL } from "../config.js";
 import { uploadFile } from 'react-s3';
 import { Buffer } from "buffer/";
 import { Videocard } from './Coursecard';
+import {useNavigate} from "react-router-dom";
+
 export const Addcv = () => {
+    const navigate = useNavigate()
+
     let { courseId } = useParams();
     const [videos, setVideos] = useState([]);
     const [selectedImageFile, setSelectedImageFile] = useState(null);
@@ -62,13 +66,14 @@ export const Addcv = () => {
                     url: videoUrl,
                 };
                 console.log(videoDataToSend);
-
                 const response = await axios.post(`${BASE_URL}/admin/url/${courseId}`, videoDataToSend, {
                     headers: {
                         "Authorization": "Bearer " + localStorage.getItem("token")
                     }
                 });
+                console.log(response.data);
                 alert(response.data.message);
+                navigate("/video/"+response.data.id);
             } catch (error) {
                 console.error("An error occurred:", error);
             }
